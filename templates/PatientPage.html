@@ -7,7 +7,7 @@
             <link rel="stylesheet" href="css/bootstrap.css" media="all" />
             <link rel="stylesheet" href="css/style.css" media="all" />
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
-            <title>Medic System login</title>
+            <title>Medic System register</title>
     </head>
     <body>
 
@@ -19,26 +19,16 @@
 
         <section class="login__section">
             <div class="container login__container">
-                <div class="login__title">
-                    <h2 class="forms__title">Proszę się zalogować</h2>
+                <div class="login__title__two">
+                    <h2 class="forms__title">Dane Pacjenta</h2>
                 </div>
                 <div class="border flex flex--center-y">
-                    <form action="{{ url_for("login")}}" method="post">
-                        <div class="login__input row flex flex--center-y">
-                            <label class="item__label">Login:</label>
-                            <input class="item__input" id="login_pesel" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
-                        </div>
-                        <div class="password__input row flex flex--center-y">
-                            <label class="item__label">Hasło:</label>
-                            <input class="item__input" id="login_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
-                        </div>
-                        <div class="forms__button row">
-                            <a href="#" class="forms__button__inner btn">Zaloguj</a>
-                        </div>
+                    <form>
+                        <iframe src="SQL-Projekt.pdf" width="100%" height="900px">
+                        </iframe>
                     </form>
-                    <div class="register">
-                        <label class="contact__name">albo </label>
-                        <a href="RegisterPage.html" class="contact__person">Zarejestruj</a>
+                    <div class="logout">
+                        <a href="LoginPage.html" class="contact__person">Wyloguj</a>
                     </div>
                 </div>
             </div>

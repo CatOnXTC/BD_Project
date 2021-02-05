@@ -4,8 +4,10 @@
         <meta charset="utf-8" />
             <meta name="description" content="" />
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-            <link rel="stylesheet" href="css/bootstrap.css" media="all" />
-            <link rel="stylesheet" href="css/style.css" media="all" />
+            <!-- <link rel="stylesheet" href="css/bootstrap.css" media="all" /> -->
+            <!-- <link rel="stylesheet" href="css/style.css" media="all" /> -->
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
             <title>Medic System login</title>
     </head>
@@ -23,17 +25,17 @@
                     <h2 class="forms__title">Proszę się zalogować</h2>
                 </div>
                 <div class="border flex flex--center-y">
-                    <form action="{{ url_for("login")}}" method="post">
+                    <form method="post">
                         <div class="login__input row flex flex--center-y">
                             <label class="item__label">Login:</label>
-                            <input class="item__input" id="login_pesel" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
+                            <input class="item__input" name="login_pesel" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
                         </div>
                         <div class="password__input row flex flex--center-y">
                             <label class="item__label">Hasło:</label>
-                            <input class="item__input" id="login_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
+                            <input class="item__input" name="login_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
                         </div>
                         <div class="forms__button row">
-                            <a href="#" class="forms__button__inner btn">Zaloguj</a>
+                            <input type="submit" href="#" class="forms__button__inner btn" value="Zaloguj">
                         </div>
                     </form>
                     <div class="register">
