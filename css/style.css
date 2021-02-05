@@ -144,3 +144,11 @@
     font-family: 'Roboto', sans-serif;
     font-size: 11px;
 }
+
+.logout{
+    justify-content: center;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    padding-bottom: 40px;
+    padding-top: 20px;
+}
