@@ -72,7 +72,6 @@
     margin-top: 8px;
     padding-right: 54px;
 }
-}
 
 .password__input .item__label{
     padding-top: 3px;
@@ -151,4 +150,10 @@
     font-family: 'Roboto', sans-serif;
     padding-bottom: 40px;
     padding-top: 20px;
+}
+
+.error{
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    color: red;
 }

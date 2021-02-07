@@ -38,9 +38,12 @@
                             <input type="submit" href="#" class="forms__button__inner btn" value="Zaloguj">
                         </div>
                     </form>
+                    {% if error %}
+                        <p class="error" style="color: red; text-align: center; font-family: 'Roboto', sans-serif;">Error: {{ error }}
+                    {% endif %}
                     <div class="register">
                         <label class="contact__name">albo </label>
-                        <a href="RegisterPage.html" class="contact__person">Zarejestruj</a>
+                        <a href="{{ url_for('getRegisterUrl') }}" class="contact__person">Zarejestruj</a>
                     </div>
                 </div>
             </div>
