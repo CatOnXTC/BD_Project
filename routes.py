@@ -1,7 +1,8 @@
 from flask import Flask, request, url_for, render_template, redirect
 import requests
-from functions import checkPassword
+from functions import hashPassword, verifyPasswordHash
 import json
+import base64
 
 print("elo")
 
@@ -24,7 +25,7 @@ def getLogin():
         print(response.status_code)
         if response.status_code == 200:
             responseJson = response.json()
-            isPasswordValid = checkPassword(responseJson, password)
+            isPasswordValid = verifyPasswordHash(responseJson['password'], password)
             if isPasswordValid:
                 return render_template("PatientPage.html")
             else:
@@ -41,9 +42,7 @@ def getRegister():
         passwordRep = request.form["register_password_rep"]
         if password!=passwordRep:
             return render_template("RegisterPage.html", error=error)
-        files = {"first_name" : "firstName1", "last_name" : "lastName1", "pesel" : pesel, "password" : password}
-        headers = {'Accept' : 'application/json', 'Content-Type' : 'application/json'}
-        #response = requests.post('http://127.0.0.1:5000/api/users', files=files, headers=headers)
+        files = {"first_name" : "firstName1", "last_name" : "lastName1", "pesel" : pesel, "password" : hashPassword(password)}
         response = requests.post('http://127.0.0.1:5000/api/users',
                      data=json.dumps(files),
                      headers={'Content-Type':'application/json'})
