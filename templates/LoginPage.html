@@ -9,6 +9,7 @@
             <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
             <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+            <!-- <script type="text/javascript" href="{{ url_for('static',filename='js/script.js') }}"></script>  -->
             <title>Medic System login</title>
     </head>
     <body>
@@ -25,14 +26,14 @@
                     <h2 class="forms__title">Proszę się zalogować</h2>
                 </div>
                 <div class="border flex flex--center-y">
-                    <form method="post">
+                    <form name = "n_form" onsubmit="return validateForm()" method="post">
                         <div class="login__input row flex flex--center-y">
                             <label class="item__label">Login:</label>
-                            <input class="item__input" name="login_pesel" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
+                            <input class="item__input" name="loginPage_login" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
                         </div>
                         <div class="password__input row flex flex--center-y">
                             <label class="item__label">Hasło:</label>
-                            <input class="item__input" name="login_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
+                            <input class="item__input" name="loginPage_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
                         </div>
                         <div class="forms__button row">
                             <input type="submit" href="#" class="forms__button__inner btn" value="Zaloguj">
@@ -61,5 +62,6 @@
             </div>
         </footer>
 
+        <!-- <script type="text/javascript" src="{{ url_for('static',filename='script.js') }}"></script> -->
     </body>
 </html>
