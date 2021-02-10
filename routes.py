@@ -5,16 +5,22 @@ import json
 import os
 import base64
 from markupsafe import escape
+from flask_session.__init__ import Session
 
 print("elo")
 
 url = 'http://127.0.0.1:5001/'
 
 app = Flask(__name__)
+# Session(app)
 app.secret_key = os.urandom(16) 
+
 
 @app.route('/',methods=['GET'])
 def home():
+    if 'login' in session:
+        login = session['login']
+        return redirect("patientPage")
     return render_template('loginPage.html')
 
 @app.route('/',methods=['POST'])
@@ -32,6 +38,7 @@ def login():
                 responseJson = response.json()
                 isPasswordValid = verifyPasswordHash(responseJson['password'], password)
                 if isPasswordValid:
+                    session['login'] = login
                     addLoggedUser(login)
                     return redirect("patientPage")
                 else:
@@ -41,7 +48,13 @@ def login():
 
 @app.route('/patientPage')
 def patientPage():
-    return render_template('PatientPage.html')
+    response = requests.get("http://127.0.0.1:5000/api/users?pesel=" + session['login'])
+    responseJson = response.json()
+    user_id = responseJson['id']
+    first_name = responseJson['first_name']
+    last_name = responseJson['last_name']
+    pesel = responseJson['pesel']
+    return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -76,6 +89,8 @@ def register():
    
 @app.route('/logout', methods=['GET'])    
 def logout():
+    delLoggedUser(session['login'])
+    session.pop('login', None)
     return redirect(url_for('login'))
 
 if __name__=='__main__': 
