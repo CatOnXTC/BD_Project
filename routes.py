@@ -15,14 +15,6 @@ app = Flask(__name__)
 # Session(app)
 app.secret_key = os.urandom(16) 
 
-headings = ("Id", "Imię i nazwisko pracownika", "Data badania", "Otwórz")
-
-data = (
-    ("1","Zbyszko","1899","<a href=pliczek></a>"),
-    ("2","SzymonSądownia","1869","pliczek"),
-    ("3","CJ","1799","pliczek"),
-)
-
 @app.route('/',methods=['GET'])
 def home():
     if 'login' in session:
@@ -55,13 +47,33 @@ def login():
 
 @app.route('/patientPage')
 def patientPage():
-    response = requests.get("http://127.0.0.1:5000/api/users?pesel=" + session['login'])
-    responseJson = response.json()
+    responseUser = requests.get("http://127.0.0.1:5000/api/users?pesel=" + session['login'])
+    responseJson = responseUser.json()
     user_id = responseJson['id']
     first_name = responseJson['first_name']
     last_name = responseJson['last_name']
     pesel = responseJson['pesel']
-    return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel, headings=headings, data=data)
+    responseResult = requests.get("http://127.0.0.1:5000/api/results?pesel=" + session['login']).json()
+    headings = ("Id", "Imię i nazwisko pracownika", "Data badania", "Otwórz")
+    dataTuple = ()
+    dataArr = []
+    idArr = []
+    usernameArr = []
+    dateArr = []
+    
+    for i in range(len(responseResult)):
+        elem = responseResult[i]
+        idArr.append(elem['id'])
+        usernameArr.append(elem['username'])
+        dateArr.append(elem['result_date'].replace("T"," "))
+
+    for i in range(len(idArr)):
+        response = requests.get("http://127.0.0.1:5000/api/employees?username=" + usernameArr[i]).json()
+        fullName = response['first_name'] + " " + response['last_name']
+        dataArr.append([idArr[i], fullName, dateArr[i],"link"])
+    dataTuple = tuple(dataArr)
+
+    return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel, headings=headings, data=dataTuple)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -72,7 +84,6 @@ def register():
         surname = request.form["register_surname"]
         password = request.form["register_password"]
         passwordRep = request.form["register_password_rep"]
-       
         if password!=passwordRep:
             return render_template("RegisterPage.html", error=error)
         
