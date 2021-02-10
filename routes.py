@@ -15,6 +15,13 @@ app = Flask(__name__)
 # Session(app)
 app.secret_key = os.urandom(16) 
 
+headings = ("Id", "Imię i nazwisko pracownika", "Data badania", "Otwórz")
+
+data = (
+    ("1","Zbyszko","1899","<a href=pliczek></a>"),
+    ("2","SzymonSądownia","1869","pliczek"),
+    ("3","CJ","1799","pliczek"),
+)
 
 @app.route('/',methods=['GET'])
 def home():
@@ -54,7 +61,7 @@ def patientPage():
     first_name = responseJson['first_name']
     last_name = responseJson['last_name']
     pesel = responseJson['pesel']
-    return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel)
+    return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel, headings=headings, data=data)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

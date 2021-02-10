@@ -34,10 +34,27 @@
                         </ul>
                     </div>
                     <div class="split__right">
-                        <label>right</label>
-                        <div class="pdf__link">
+                        <table class="treatement__table" method="POST">
+                            <tr class="treatement__table-header">
+                                {% for header in headings %}
+                                <th class="treatement__table-cell">{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                            {% for row in data %}
+                            <tr class="treatement__table-row">
+                                {% for cell in row %}
+                                    {% if loop.index == 4 %}
+                                        <td><a href="{{ cell }}">Pobierz</a></td>
+                                    {% else %}
+                                        <td class="treatement__table-cell">{{ cell }}</td>
+                                    {% endif %}           
+                                {% endfor %}
+                            </tr>
+                            {% endfor %} 
+                        </table>
+                        <!--  <div class="pdf__link">
                             <a href="SQL-Projekt.pdf" class="pdf__link__text">example</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="border flex flex--center-y">
