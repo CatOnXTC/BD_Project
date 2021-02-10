@@ -4,9 +4,12 @@
         <meta charset="utf-8" />
             <meta name="description" content="" />
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-            <link rel="stylesheet" href="css/bootstrap.css" media="all" />
-            <link rel="stylesheet" href="css/style.css" media="all" />
+            <!-- <link rel="stylesheet" href="css/bootstrap.css" media="all" /> -->
+            <!-- <link rel="stylesheet" href="css/style.css" media="all" /> -->
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+            <!-- <script type="text/javascript" href="{{ url_for('static',filename='js/script.js') }}"></script>  -->
             <title>Medic System login</title>
     </head>
     <body>
@@ -23,22 +26,25 @@
                     <h2 class="forms__title">Proszę się zalogować</h2>
                 </div>
                 <div class="border flex flex--center-y">
-                    <form>
+                    <form name = "n_form" onsubmit="return validateForm()" method="post">
                         <div class="login__input row flex flex--center-y">
                             <label class="item__label">Login:</label>
-                            <input class="item__input" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
+                            <input class="item__input" name="loginPage_login" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
                         </div>
                         <div class="password__input row flex flex--center-y">
                             <label class="item__label">Hasło:</label>
-                            <input class="item__input" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
+                            <input class="item__input" name="loginPage_password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź hasło...'" placeholder="Wprowadź hasło...">                  
                         </div>
                         <div class="forms__button row">
-                            <a href="#" class="forms__button__inner btn">Zaloguj</a>
+                            <input type="submit" href="#" class="forms__button__inner btn" value="Zaloguj">
                         </div>
                     </form>
+                    {% if error %}
+                        <p class="error" style="color: red; text-align: center; font-family: 'Roboto', sans-serif;">Error: {{ error }}
+                    {% endif %}
                     <div class="register">
                         <label class="contact__name">albo </label>
-                        <a href="RegisterPage.html" class="contact__person">Zarejestruj</a>
+                        <a href="{{ url_for('register') }}" class="contact__person">Zarejestruj</a>
                     </div>
                 </div>
             </div>
@@ -56,5 +62,6 @@
             </div>
         </footer>
 
+        <!-- <script type="text/javascript" src="{{ url_for('static',filename='script.js') }}"></script> -->
     </body>
 </html>

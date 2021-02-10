@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8" />
+            <meta name="description" content="" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+            <!-- <link rel="stylesheet" href="css/bootstrap.css" media="all" />
+            <link rel="stylesheet" href="css/style.css" media="all" /> -->
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+            <title>Medic System register</title>
+    </head>
+    <body>
+
+        <header class="title">
+            <div class="container">
+                <div class="logo__image"></div>
+            </div>
+        </header>
+
+        <section class="login__section">
+            <div class="container login__container">
+                <div class="login__title__two">
+                    <h2 class="forms__title">Dane Pacjenta</h2>
+                </div>
+                <div class="split__screen">
+                    <div class="split__left">
+                        <label class="patient__id">ID Pacjenta: {{user_id}}</label>
+                        <ul method="POST" class="patient__data">
+                            <li>Pesel: {{pesel}}</li>
+                            <li>Imię: {{first_name}}</li>
+                            <li>Nazwisko: {{last_name}}</li>
+                        </ul>
+                    </div>
+                    <div class="split__right">
+                        <table class="treatement__table" method="POST">
+                            <tr class="treatement__table-header">
+                                {% for header in headings %}
+                                <th class="treatement__table-cell">{{ header }}</th>
+                                {% endfor %}
+                            </tr>
+                            {% for row in data %}
+                            <tr class="treatement__table-row">
+                                {% for cell in row %}
+                                    {% if loop.index == 4 %}
+                                        <td><a href="{{ cell }}">Pobierz</a></td>
+                                    {% else %}
+                                        <td class="treatement__table-cell">{{ cell }}</td>
+                                    {% endif %}           
+                                {% endfor %}
+                            </tr>
+                            {% endfor %} 
+                        </table>
+                        <!--  <div class="pdf__link">
+                            <a href="SQL-Projekt.pdf" class="pdf__link__text">example</a>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="border flex flex--center-y">
+                    <form>
+                        <!-- <iframe src="SQL-Projekt.pdf" width="100%" height="900px"></iframe> -->
+                    </form>
+                    <div class="logout">
+                        <a href="{{ url_for('logout') }}" class="contact__person">Wyloguj</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="login__footer">
+            <div class="container">
+                <div class="line__surround">
+                    <div class="line"></div>
+                </div>
+                <div class="footer__box flex flex--center-y">
+                    <label class="contact__name">W razie problemów proszę o kontakt z:</label>
+                    <a href="#" class="contact__person">support@medic.system.pl</a>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+</html>

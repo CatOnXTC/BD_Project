@@ -4,10 +4,10 @@
         <meta charset="utf-8" />
             <meta name="description" content="" />
             <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-            <link rel="stylesheet" href="css/bootstrap.css" media="all" />
-            <link rel="stylesheet" href="css/style.css" media="all" />
-            <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
-            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}"> -->
+            <!-- <link rel="stylesheet" href="css/bootstrap.css" media="all" />
+            <link rel="stylesheet" href="css/style.css" media="all" /> -->
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/bootstrap.css') }}">
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
             <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
             <title>Medic System register</title>
     </head>
@@ -21,8 +21,8 @@
 
         <section class="login__section">
             <div class="container login__container">
-                <div class="login__title__two">
-                    <h2 class="forms__title">Dane Pacjenta</h2>
+                <div method="POST" class="login__title__two">
+                    <h2 class="forms__title">Dane Pacjenta: {{ first_name }}</h2>
                 </div>
                 <div class="split__screen">
                     <div class="split__left">
