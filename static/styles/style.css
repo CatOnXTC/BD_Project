@@ -153,8 +153,51 @@
     padding-top: 20px;
 }
 
+.pdf__link{
+    justify-content: center;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.pdf__link__text{
+    text-decoration: none;
+}
+
 .error{
     font-family: 'Roboto', sans-serif;
     text-align: center;
     color: red;
+}
+
+.split__screen{
+    display: flex;
+}
+
+.split__left{
+    width: 40%;
+    border: 1px solid #62c6ec;
+    padding-top: 10px;
+}
+
+.split__right{
+    width: 60%;
+    border: 1px solid #62c6ec;
+}
+
+.patient__id{
+    font-family: 'Roboto', sans-serif;
+    padding-left: 5px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.patient__data{
+    font-family: 'Roboto', sans-serif;
+    list-style-type: none;
+    padding-left: 5px;
+    border-top: 1px solid #62c6ec;
+}
+
+.patient__data li{
+    padding-top: 10px;
 }
