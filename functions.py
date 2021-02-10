@@ -1,5 +1,7 @@
 import hashlib, binascii, os
- 
+
+#============ Hashing password =============
+
 def hashPassword(password):
     """Hash a password for storing."""
     salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
@@ -20,6 +22,15 @@ def verifyPasswordHash(stored_password, provided_password):
                                     100000)
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
         return pwdhash == stored_password
+
+#============ Others =============
+
+# if True this is Patient else Admin
+def checkIfUser(login):
+    if len(login) == 11 and login.isdigit():
+        return True
+    else:
+        return False
    
 
 #============ Managing the logged in users =============

@@ -28,7 +28,15 @@
                     <form method="post">
                         <div class="login__input row flex flex--center-y">
                             <label class="item__label">Login*:</label>
-                            <input class="item__input" name="register_pesel" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
+                            <input class="item__input" name="register_login" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź login...'" placeholder="Wprowadź login...">                  
+                        </div>
+                        <div class="name__input row flex flex--center-y">
+                            <label class="item__label">Imię:</label>
+                            <input class="item__input" name="register_name" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź imię...'" placeholder="Wprowadź imię...">                  
+                        </div>
+                        <div class="surname__input row flex flex--center-y">
+                            <label class="item__label">Nazwisko:</label>
+                            <input class="item__input" name="register_surname" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder ='Wprowadź nazwisko...'" placeholder="Wprowadź nazwisko...">                  
                         </div>
                         <div class="password__input row flex flex--center-y">
                             <label class="item__label">Hasło:</label>
@@ -57,7 +65,7 @@
                     {% endif %}
                     <div class="register">
                         <label class="contact__name">albo </label>
-                        <a href="{{ url_for('getLoginUrl') }}" class="contact__person">Zaloguj</a>
+                        <a href="{{ url_for('register') }}" class="contact__person">Zaloguj</a>
                     </div>
                 </div>
             </div>

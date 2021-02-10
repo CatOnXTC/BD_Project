@@ -34,12 +34,13 @@
     background-color: #f0f2f9;
 }
 
-.login__input{
+.login__input, .name__input, .surname__input{
     font-family: 'Roboto', sans-serif;
     justify-content: center;
     line-height: 24px;
     margin-bottom: 10px;
 }
+
 
 .item__lable{
     font-family: 'Roboto', sans-serif;
