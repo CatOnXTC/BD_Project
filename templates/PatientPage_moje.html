@@ -24,10 +24,25 @@
                 <div method="POST" class="login__title__two">
                     <h2 class="forms__title">Dane Pacjenta: {{ first_name }}</h2>
                 </div>
+                <div class="split__screen">
+                    <div class="split__left">
+                        <label class="patient__id">ID Pacjenta: 1</label>
+                        <ul class="patient__data">
+                            <li>Pesel: 1234567890</li>
+                            <li>Imię: Jan</li>
+                            <li>Nazwisko: Kowalski</li>
+                        </ul>
+                    </div>
+                    <div class="split__right">
+                        <label>right</label>
+                        <div class="pdf__link">
+                            <a href="SQL-Projekt.pdf" class="pdf__link__text">example</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="border flex flex--center-y">
                     <form>
-                        <iframe src="SQL-Projekt.pdf" width="100%" height="900px">
-                        </iframe>
+                        <!-- <iframe src="SQL-Projekt.pdf" width="100%" height="900px"></iframe> -->
                     </form>
                     <div class="logout">
                         <a href="{{ url_for('logout') }}" class="contact__person">Wyloguj</a>
