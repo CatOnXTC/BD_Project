@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort
+from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort, make_response
 import requests
 from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs
 import json
@@ -6,6 +6,9 @@ import os
 import base64
 from markupsafe import escape
 from flask_session.__init__ import Session
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
+
 
 print("elo")
 
@@ -13,7 +16,8 @@ url = 'http://127.0.0.1:5001/'
 
 app = Flask(__name__)
 # Session(app)
-app.secret_key = os.urandom(16) 
+# app.secret_key = os.urandom(16) 
+app.secret_key = "kk"
 app.config["CLIENT_PDF"] = "C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf"
 app.config["UPLOAD_FOLDER"] = "C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/uploads"
 # app.config['UPLOAD_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -21,10 +25,11 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 fileNameArr = []
 
+currentSession = ""
+
 @app.route('/',methods=['GET'])
 def home():
     if 'login' in session:
-        login = session['login']
         return redirect("patientPage")
     return render_template('loginPage.html')
 
@@ -46,17 +51,21 @@ def login():
                     isPasswordValid = verifyPasswordHash(responseJson['password'], password)
                     if isPasswordValid:
                         session['login'] = login
+                        currentSession = session['login']
                         addLoggedUser(login)
                         return redirect("patientPage")
                     else:
                         render_template("LoginPage.html", error=error)   
             else:
                 response = requests.get("http://127.0.0.1:5000/api/employees?username="+login)
+                print(login + " ++++++++++++++++++")
                 if response.status_code == 200 and checkIfLoggedIn(login) == False:
                     responseJson = response.json()
                     isPasswordValid = verifyPasswordHash(responseJson['password'], password)
                     if isPasswordValid:
                         session['login'] = login
+                        currentSession = session['login']
+                        print(str(session) + " ++++++++++++++++++")
                         addLoggedUser(login)
                         return redirect("adminPage")
                     else:
@@ -64,18 +73,23 @@ def login():
             
     return render_template("LoginPage.html")
 
-@app.route('/adminPage',methods=['POST','GET'])
+@app.route('/adminPage')
 def adminPage():
     headings = ("PESEL Pacjenta", "Dodaj badanie", "Usuń Pacjenta")
-    response = requests.get("http://127.0.0.1:5000/api/users").json()
+    responseUsers = requests.get("http://127.0.0.1:5000/api/users").json()
+    print(str(session) + " ++++++++++++ADmin++++++")
+    responseAdmin = requests.get("http://127.0.0.1:5000/api/employees?username=" + session['login']).json()
+    adminId = responseAdmin['id']
+    adminFirstName = responseAdmin['first_name']
+    adminLastName = responseAdmin['last_name']
     peselArr = []
     dataTuple = ()
     dataArr = []
-    for elem in response:
+    for elem in responseUsers:
         dataArr.append([elem['pesel'], "upload_file/","usuń"])
     dataTuple = tuple(dataArr)
 
-    return render_template('AdminPage.html', headings=headings, data=dataTuple)
+    return render_template('AdminPage.html', user_id = adminId, first_name = adminFirstName, last_name = adminLastName, headings=headings, data=dataTuple)
 
 @app.route('/patientPage')
 def patientPage():
@@ -118,26 +132,14 @@ def get_image(file_name):
     except FileNotFoundError:
         abort(404)
 
-@app.route('/upload_file', methods=['POST','GET'])
+@app.route('/uploader', methods = ['POST'])
 def upload_file():
-        if request.method == 'POST':
-        # check if the post request has the file part
-            if 'file' not in request.files:
-                flash('No file part')
-                return redirect(request.url)
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit a empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-                return redirect(request.url)
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                return redirect(url_for('uploaded_file',
-                                        filename=filename))
-        return
-
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
+    # return render_template("AdminPage.html")
+    return redirect("adminPage")
+      
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -174,8 +176,10 @@ def register():
    
 @app.route('/logout', methods=['GET'])    
 def logout():
+    print(session['login'] + " ++++++++++++++++++")
     deletePdfs(session['login'], fileNameArr)
     delLoggedUser(session['login'])
+    currentSession = ""
     session.pop('login', None)
     return redirect(url_for('login'))
 
