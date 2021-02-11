@@ -219,3 +219,8 @@ tr:nth-child(even) {
 .treatement__table-cell{
     padding: 3px;
 }
+
+.treatement__table-header{
+    text-align: right;
+    font-family: 'Roboto', sans-serif;
+}
