@@ -1,4 +1,6 @@
 import hashlib, binascii, os
+import base64
+import os
 
 #============ Hashing password =============
 
@@ -46,3 +48,17 @@ def delLoggedUser(user):
 def checkIfLoggedIn(user):
     return user in currentLoggedInArr
 
+#============ Converting from and to blob =============
+
+def createPdfs(fileBlobArr,fileNameArr):
+    for i in range(len(fileBlobArr)):     
+        blob = base64.b64decode(fileBlobArr[i])
+        pdf_file = open("C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf/"+fileNameArr[i],"wb")
+        pdf_file.write(blob)
+        pdf_file.close()
+
+def deletePdfs(pesel, fileNameArr):
+    for fName in fileNameArr:
+        if os.path.exists("C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf/"+fName) and pesel in fName:
+            print(fName)
+            os.remove("C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf/"+fName)

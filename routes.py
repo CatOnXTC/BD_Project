@@ -1,6 +1,6 @@
-from flask import Flask, request, url_for, render_template, redirect, session, sessions
+from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort
 import requests
-from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser
+from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs
 import json
 import os
 import base64
@@ -14,6 +14,9 @@ url = 'http://127.0.0.1:5001/'
 app = Flask(__name__)
 # Session(app)
 app.secret_key = os.urandom(16) 
+app.config["CLIENT_PDF"] = "C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf"
+app.config['UPLOAD_EXTENSIONS'] = ['.pdf']
+fileNameArr = []
 
 @app.route('/',methods=['GET'])
 def home():
@@ -60,20 +63,35 @@ def patientPage():
     idArr = []
     usernameArr = []
     dateArr = []
+    fileBlobArr = []
     
     for i in range(len(responseResult)):
         elem = responseResult[i]
         idArr.append(elem['id'])
+        print(elem['username'])
         usernameArr.append(elem['username'])
         dateArr.append(elem['result_date'].replace("T"," "))
-
+        fileNameArr.append(elem['pesel'] + "___" + elem['result_date'].replace(":","_")+".pdf")
+        fileBlobArr.append(elem['result_file'])
+    
+    createPdfs(fileBlobArr,fileNameArr)
     for i in range(len(idArr)):
         response = requests.get("http://127.0.0.1:5000/api/employees?username=" + usernameArr[i]).json()
+        print(response)
         fullName = response['first_name'] + " " + response['last_name']
-        dataArr.append([idArr[i], fullName, dateArr[i],"link"])
+        dataArr.append([idArr[i], fullName, dateArr[i],"get-file/" + fileNameArr[i]])
     dataTuple = tuple(dataArr)
 
     return render_template('PatientPage.html', user_id = user_id, first_name = first_name, last_name = last_name, pesel = pesel, headings=headings, data=dataTuple)
+
+@app.route("/get-file/<file_name>")
+def get_image(file_name):
+    try:
+        return send_from_directory(app.config["CLIENT_PDF"], filename=file_name, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -107,6 +125,7 @@ def register():
    
 @app.route('/logout', methods=['GET'])    
 def logout():
+    deletePdfs(session['login'], fileNameArr)
     delLoggedUser(session['login'])
     session.pop('login', None)
     return redirect(url_for('login'))
