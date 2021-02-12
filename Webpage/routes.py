@@ -14,6 +14,7 @@ print("elo")
 
 url = 'http://127.0.0.1:5001/'
 
+
 app = Flask(__name__)
 # Session(app)
 # app.secret_key = os.urandom(16) 
