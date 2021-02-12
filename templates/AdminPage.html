@@ -41,13 +41,18 @@
                             </tr>
                             {% for row in data %}
                             <tr class="treatement__table-row">
-                                {% for cell in row %}
-                                    {% if loop.index == 3 %}
-                                        <td class="treatement__table-cell"><a href="{{ cell }}">Usuń</a></td>
-                                    {% else if loop.index == 2 %}
-                                        <td class="treatement__table-cell"><a href="{{ cell }}">Dodaj</a></td>
-                                    {% else %}
+                                {% for cell in row %}                                      
                                         <td class="treatement__table-cell">{{ cell }}</td>
+                                    {% if loop.index == 2 %}      
+                                        <td class="treatement__table-cell">
+                                            <form  action = "http://localhost:5001/uploader" method = "POST" enctype = "multipart/form-data">
+                                                <input type="file" name="file" multiple>
+                                                <input type="submit" value="Submit">
+                                            </form>
+                                        </td>
+                                    {% endif %}
+                                    {% if loop.index == 3 %}
+                                        <td class="treatement__table-cell"><a href="{{ cell }}"></a></td>
                                     {% endif %}           
                                 {% endfor %}
                             </tr>
