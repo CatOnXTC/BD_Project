@@ -19,8 +19,8 @@ app = Flask(__name__)
 # Session(app)
 # app.secret_key = os.urandom(16) 
 app.secret_key = "kk"
-app.config["CLIENT_PDF"] = "C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/pdf"
-app.config["UPLOAD_FOLDER"] = "C:/Users/Geops/Desktop/BD Project/BD_Project/static/client/uploads"
+app.config["CLIENT_PDF"] = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf"
+app.config["UPLOAD_FOLDER"] = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads"
 # app.config['UPLOAD_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
