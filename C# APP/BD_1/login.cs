@@ -36,7 +36,6 @@ namespace BD_1
         {
 
         }
-
         private void login_Click(object sender, EventArgs e)
         {
             if(!this.loginBox.Text.Equals("") && !this.passBox.Text.Equals(""))
@@ -49,6 +48,7 @@ namespace BD_1
                     user.Show();
 
                 }
+              
             }
             else
             {
