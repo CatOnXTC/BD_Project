@@ -41,19 +41,17 @@
                             </tr>
                             {% for row in data %}
                             <tr class="treatement__table-row">
-                                {% for cell in row %}                                      
+                                {% for cell in row %} 
+                                    {% if loop.index == 1 %}                                     
                                         <td class="treatement__table-cell">{{ cell }}</td>
-                                    {% if loop.index == 2 %}      
+                                    {% endif %}        
                                         <td class="treatement__table-cell">
                                             <form  action = "http://localhost:5001/uploader?&session={{session['login']}}&pesel={{row[0]}}" method = "POST" enctype = "multipart/form-data">
                                                 <input type="file" name="file" multiple>
                                                 <input type="submit" value="Submit">
                                             </form>
                                         </td>
-                                    {% endif %}
-                                    {% if loop.index == 3 %}
-                                        <td class="treatement__table-cell"><a href="{{ cell }}"></a></td>
-                                    {% endif %}           
+                                        <td class="treatement__table-cell"><a href="http://localhost:5001/remove?&session={{session['login']}}&pesel={{row[0]}}">Usuń pacjenta</a></td>
                                 {% endfor %}
                             </tr>
                             {% endfor %} 

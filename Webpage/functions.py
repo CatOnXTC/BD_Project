@@ -2,6 +2,9 @@ import hashlib, binascii, os
 import base64
 import os
 
+PDF_PATH = "C:/Users/Geops/Desktop/PROJEKT_BD_MAIN/BD_Project/Webpage/static/client/pdf/"
+UPLOADS_PATH = "C:/Users/Geops/Desktop/PROJEKT_BD_MAIN/BD_Project/Webpage/static/client/uploads/"
+
 #============ Hashing password =============
 
 def hashPassword(password):
@@ -42,22 +45,21 @@ def checkIfLoggedIn(user):
 #============ Converting from and to blob =============
 
 def pdfToBlob(filename):
-    file_path = 'D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads\\' #YOUR PATH
-    with open(file_path+filename, 'rb') as f:
+    # file_path = 'D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads\\' #YOUR PATH
+    with open(UPLOADS_PATH + filename, 'rb') as f:
         blob = str(base64.b64encode(f.read()))
         blob = blob[2:-1]
-    os.remove(file_path+filename)
+    os.remove(UPLOADS_PATH + filename)
     return blob
 
 def createPdfs(fileBlobArr,fileNameArr):
     for i in range(len(fileBlobArr)):     
         blob = base64.b64decode(fileBlobArr[i])
-        pdf_file = open("D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf\\"+fileNameArr[i],"wb")
+        pdf_file = open(PDF_PATH + fileNameArr[i],"wb")
         pdf_file.write(blob)
         pdf_file.close()
 
 def deletePdfs(pesel, fileNameArr):
     for fName in fileNameArr:
-        if os.path.exists("D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf\\"+fName) and pesel in fName:
-            print(fName)
-            os.remove("D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf\\"+fName)
+        if os.path.exists(PDF_PATH + fName) and pesel in fName:
+            os.remove(PDF_PATH + fName)

@@ -73,16 +73,24 @@ class UserManager(Resource):
 
     @staticmethod
     def post():
+        try: pesel_req = request.args['pesel']
+        except Exception as _: pesel_req = None
+
         pesel = request.json['pesel']
         password = request.json['password']
         first_name = request.json['first_name']
         last_name = request.json['last_name']
 
-        if check_pesel(pesel) == True and User.query.filter_by(pesel=pesel).first() == None:
+        if check_pesel(pesel) == True and User.query.filter_by(pesel=pesel).first() == None and pesel_req == None:
             user = User(pesel, password, first_name, last_name)
             db.session.add(user)
             db.session.commit()
             return make_response(jsonify({'Message': f'User {first_name} {last_name} inserted.'}),201)
+        elif check_pesel(pesel_req) == True and User.query.filter_by(pesel=pesel_req).first() != None and pesel_req != None:
+            user = User.query.get(pesel_req)
+            db.session.delete(user)
+            db.session.commit()
+            return make_response(jsonify({'Message': f'User {pesel_req} deleted.'}),200)
         else:
             return make_response(jsonify({ 'Message': 'Wrong credentials!' }),400)
        
@@ -172,15 +180,25 @@ class ResultManager(Resource):
 
     @staticmethod
     def post():
+        try: pesel_req = request.args['pesel']
+        except Exception as _: pesel_req = None
+
         pesel = request.json['pesel']
         username = request.json['username']
         result_file = request.json['result_file']
 
         if check_pesel(pesel) == True:
-            result = Result(pesel, username, result_file)
-            db.session.add(result)
-            db.session.commit()
-            return jsonify({'Message': f'Result for pesel: {pesel} inserted.'})
+            if pesel_req == None:
+                result = Result(pesel, username, result_file)
+                db.session.add(result)
+                db.session.commit()
+                return jsonify({'Message': f'Result for pesel: {pesel} inserted.'})
+            else:
+                results = Result.query.filter_by(pesel=pesel_req).all()
+                for result in results:
+                    db.session.delete(result)
+                db.session.commit() 
+                return jsonify({'Message': f'Result for pesel: {pesel_req} deleted.' })
         else:
             return make_response(jsonify({ 'Message': 'Wrong pesel format!' }),400)
        
@@ -211,8 +229,9 @@ class ResultManager(Resource):
         if not pesel or check_pesel(pesel) == False:
             return jsonify({ 'Message': 'Must provide the user pesel' })
 
-        result = Result.query.get(pesel)
-        db.session.delete(result)
+        results = Result.query.filter_by(pesel=pesel).all()
+        for result in results:
+            db.session.delete(result)
         db.session.commit()
 
         return jsonify({
