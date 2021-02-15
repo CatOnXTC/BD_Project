@@ -1,6 +1,6 @@
-from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort, make_response
+from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort, make_response, g, jsonify
 import requests
-from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs
+from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs, pdfToBlob
 import json
 import os
 import base64
@@ -8,6 +8,7 @@ from markupsafe import escape
 from flask_session.__init__ import Session
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
+import datetime
 
 
 print("elo")
@@ -16,6 +17,7 @@ url = 'http://127.0.0.1:5001/'
 
 
 app = Flask(__name__)
+app.permanent = datetime.timedelta(minutes=15)
 # Session(app)
 # app.secret_key = os.urandom(16) 
 app.secret_key = "kk"
@@ -68,7 +70,7 @@ def login():
                         currentSession = session['login']
                         print(str(session) + " ++++++++++++++++++")
                         addLoggedUser(login)
-                        return redirect("adminPage")
+                        return redirect(url_for("adminPage"))
                     else:
                         render_template("LoginPage.html", error=error)     
             
@@ -135,11 +137,21 @@ def get_image(file_name):
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
+    session["login"] = request.args.get("session")
+    pesel = request.args.get("pesel")
     if request.method == 'POST':
         f = request.files['file']
         f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
-    # return render_template("AdminPage.html")
-    return redirect("adminPage")
+        blob = pdfToBlob(f.filename)
+        files = {'pesel': pesel, 'username' : session["login"], 'result_file' : blob}
+
+        res = requests.post('http://127.0.0.1:5000/api/results',
+                data=json.dumps(files),
+                headers={'Content-Type':'application/json'})
+
+    redirected = redirect(url_for("adminPage"))
+    redirected.set_cookie("login", session["login"])
+    return redirected
       
 def allowed_file(filename):
     return '.' in filename and \

@@ -41,6 +41,14 @@ def checkIfLoggedIn(user):
 
 #============ Converting from and to blob =============
 
+def pdfToBlob(filename):
+    file_path = 'D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads\\' #YOUR PATH
+    with open(file_path+filename, 'rb') as f:
+        blob = str(base64.b64encode(f.read()))
+        blob = blob[2:-1]
+    os.remove(file_path+filename)
+    return blob
+
 def createPdfs(fileBlobArr,fileNameArr):
     for i in range(len(fileBlobArr)):     
         blob = base64.b64decode(fileBlobArr[i])

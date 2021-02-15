@@ -146,7 +146,7 @@ class Result(db.Model):
         self.pesel = pesel
         self.username = username
         # self.result_date = datetime.date.today()
-        self.result_file# = result_file
+        self.result_file = result_file
 
 class ResultSchema(ma.Schema):
     class Meta:
