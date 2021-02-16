@@ -58,6 +58,15 @@ class UserManager(Resource):
     def get():
         try: pesel = request.args['pesel']
         except Exception as _: pesel = None
+        
+        try: pesel_req = request.args['pesel_req']
+        except Exception as _: pesel_req = None
+
+        if pesel_req != None:
+            user = User.query.filter_by(pesel=pesel_req).first()
+            db.session.delete(user)
+            db.session.commit()
+            return make_response(jsonify({'Message': f'User {pesel_req} deleted.'}),200)
 
         if not pesel:
             users = User.query.all()
@@ -166,10 +175,19 @@ results_schema = ResultSchema(many=True)
 class ResultManager(Resource):
     @staticmethod
     def get():
-        try: pesel = request.args['pesel']
+        try:  pesel = request.args['pesel']    
         except Exception as _: pesel = None
 
-        if not pesel:
+        try: pesel_req = request.args['pesel_req']
+        except Exception as _: pesel_req = None
+
+        if pesel_req != None:
+            results = Result.query.filter_by(pesel=pesel_req).all()
+            for result in results:
+                db.session.delete(result)
+            db.session.commit() 
+            return make_response(jsonify({'Message': f'Result for pesel: {pesel_req} deleted.' }),200)
+        elif not pesel:
             results = Result.query.all()
             return jsonify(results_schema.dump(results))
         elif check_pesel(pesel) == False:

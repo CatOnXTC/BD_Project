@@ -149,13 +149,13 @@ def upload_file():
     redirected.set_cookie("login", session["login"])
     return redirected
 
-@app.route('/remove', methods = ['POST'])
+@app.route('/remove', methods = ['GET'])
 def remove_patient():
     session["login"] = request.args.get("session")
     pesel = request.args.get("pesel")
-    if request.method == 'POST':
-        responsePatient = requests.post('http://127.0.0.1:5000/api/users?pesel=' + pesel, headers={'Content-Type':'application/json'})
-        responseResults = requests.post('http://127.0.0.1:5000/api/results?pesel=' + pesel, headers={'Content-Type':'application/json'})
+    if request.method == 'GET':
+        responsePatient = requests.get('http://127.0.0.1:5000/api/users?pesel_req=' + pesel, headers={'Content-Type':'application/json'})
+        responseResults = requests.get('http://127.0.0.1:5000/api/results?pesel_req=' + pesel, headers={'Content-Type':'application/json'})
     redirected = redirect(url_for("adminPage"))
     redirected.set_cookie("login", session["login"])
     return redirected
