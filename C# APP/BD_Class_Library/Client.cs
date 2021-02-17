@@ -119,7 +119,7 @@ namespace BD_Class_Library
 
 
         }
-        protected string[] makeRequest(string message, int type)
+        public string[] makeRequest(string message, int type)
         {
             string msgResponse = string.Empty;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(message);
@@ -204,6 +204,26 @@ namespace BD_Class_Library
 
                                         }
                                         jsonResponse = reader.ReadLine();
+
+                                    }
+                                    else if (type == 3)
+                                    {
+                                        jsonResponse = Regex.Replace(jsonResponse, @"[^0-9a-zA-Z\+\\\/\=]+", "");
+
+
+                                        if (jsonResponse.Contains("firstname"))
+                                        {
+                                            
+                                            jsonResponse = jsonResponse.Replace("firstname", "");
+                                            resp[0] = jsonResponse;
+                                        }
+                                        if (jsonResponse.Contains("lastname"))
+                                        {
+                                            jsonResponse = jsonResponse.Replace("lastname", "");
+                                            resp[1] = jsonResponse; 
+                                        }
+                                        jsonResponse = reader.ReadLine();
+
 
                                     }
 

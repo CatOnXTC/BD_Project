@@ -60,8 +60,7 @@ namespace BD_1
                 if (result1 == DialogResult.OK)
                 {
                     string folderName = folderBrowserDialog1.SelectedPath;
-                    string filename = folderName +"\\"+ login +"___"+date+".pdf";
-                   // string filename2 = folderName+"\\badaniebyte.pdf"; 
+                    string filename = folderName +"\\"+ login +"___"+date+".pdf"; 
                     File.WriteAllBytes(filename, newBytes);
                 }
             }
@@ -102,7 +101,11 @@ namespace BD_1
                 {
                     i++;
                 }
-                table1.Rows[j].Cells[0].Value = response[i];
+
+                String message = "http://127.0.0.1:5000/api/employees?" + response[i];
+                string[] received= client.makeRequest(message, 3);
+
+                table1.Rows[j].Cells[0].Value = received[0]+" "+ received[1];
                 i++;
                 if (i % 4 == 0)
                 {
@@ -116,24 +119,3 @@ namespace BD_1
         
     }
 }
-/*
- private void login_Click(object sender, EventArgs e)
-        {
-            if(!this.loginBox.Text.Equals("") && !this.passBox.Text.Equals(""))
-            {
-                this.resp.Text = client.Login(this.loginBox.Text, this.passBox.Text);
-                if( this.resp.Text== "Logged In")
-                {
-                    User user = new User(this.loginBox.Text, this.passBox.Text);
-                    this.Hide();
-                    user.Show();
-
-                }
-            }
-            else
-            {
-                this.resp.Text = "Invalid Credentials";
-            }
-            
-        }
-*/
