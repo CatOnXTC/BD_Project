@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
     "",
-    "\\API + DB",
-    "\\C# APP",
-    "\\C# APP\\BD_1",
-    "\\C# APP\\BD_Class_Library",
-    "\\C# APP\\BD_Class_Library\\Properties"
+    "\\C# APP"
   ],
   "SelectedNode": "\\C# APP\\MedicDB_Project.sln",
   "PreviewInSolutionExplorer": false

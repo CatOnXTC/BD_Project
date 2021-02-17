@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace BD_1
 {
+    //Sprawdzić czy przy null jest zapisz
     public partial class User : Form
     {
         string login, password;
@@ -48,18 +49,20 @@ namespace BD_1
         private void table1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             int row = table1.CurrentRow.Index;
-            
+            string date = table1.Rows[row].Cells[1].Value.ToString();
             try
             {
-
+                //62051504872___2021-02-17T17_50_31
                 byte[] newBytes = Convert.FromBase64String(blobs[row]);
                 var folderBrowserDialog1 = new FolderBrowserDialog();
+               
                 DialogResult result1 = folderBrowserDialog1.ShowDialog();
                 if (result1 == DialogResult.OK)
                 {
                     string folderName = folderBrowserDialog1.SelectedPath;
-                    string filename2 = folderName+"\\badaniebyte.pdf"; 
-                    File.WriteAllBytes(filename2, newBytes);
+                    string filename = folderName +"\\"+ login +"___"+date+".pdf";
+                   // string filename2 = folderName+"\\badaniebyte.pdf"; 
+                    File.WriteAllBytes(filename, newBytes);
                 }
             }
             catch(System.FormatException a)
