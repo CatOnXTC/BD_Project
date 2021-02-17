@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +14,7 @@ namespace BD_1
     public partial class User : Form
     {
         string login, password;
-
+        String[] blobs = new String[100];
         BD_Class_Library.Client client = new BD_Class_Library.Client();
 
         public User(string log, string pass)
@@ -44,21 +45,69 @@ namespace BD_1
             loadData();
         }
 
+        private void table1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int row = table1.CurrentRow.Index;
+            
+            try
+            {
+
+                byte[] newBytes = Convert.FromBase64String(blobs[row]);
+                var folderBrowserDialog1 = new FolderBrowserDialog();
+                DialogResult result1 = folderBrowserDialog1.ShowDialog();
+                if (result1 == DialogResult.OK)
+                {
+                    string folderName = folderBrowserDialog1.SelectedPath;
+                    string filename2 = folderName+"\\badaniebyte.pdf"; 
+                    File.WriteAllBytes(filename2, newBytes);
+                }
+            }
+            catch(System.FormatException a)
+            {
+                Console.WriteLine("Błędny format pliku");
+            }
+        }
+
         private string[] loadData()
         {
 
             string[] response = client.GetData(login, password);
-            table1.Rows.Add();
-            table1.Rows[0].Cells[0].Value = response[3];
-            table1.Rows[0].Cells[1].Value = response[1];
-            if(response[2]=="null")
+            int i = 1;
+            int j = 0;
+            blobs = new String[100];
+            while (response[i]!=null)
             {
-               table1.Rows[0].Cells[2].Value = "Nie umieszczono";
+                table1.Rows.Add(); 
+                table1.Rows[j].Cells[1].Value = response[i];
+                i++;
+                if(i%4==0)
+                {
+                    i++;
+                }
+                if (response[i] == "null")
+                {
+                    table1.Rows[j].Cells[2].Value = "Nie umieszczono";
+                }
+                else
+                {
+                    table1.Rows[j].Cells[2].Value = "Umieszczono";
+                    blobs[j] = response[i];
+                }
+           
+                i++;
+                if (i % 4 == 0)
+                {
+                    i++;
+                }
+                table1.Rows[j].Cells[0].Value = response[i];
+                i++;
+                if (i % 4 == 0)
+                {
+                    i++;
+                }
+                j++;
             }
-            else { table1.Rows[0].Cells[1].Value = response[2]; }
-
-            
-
+  
             return response;
         }
         

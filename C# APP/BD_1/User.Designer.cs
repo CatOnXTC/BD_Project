@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.table1 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.refresh = new System.Windows.Forms.Button();
             this.added = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.date = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
-            this.refresh = new System.Windows.Forms.Button();
+            this.res2 = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.table1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,13 +44,35 @@
             this.table1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.added,
             this.date,
-            this.result});
+            this.result,
+            this.res2});
             this.table1.Location = new System.Drawing.Point(12, 12);
             this.table1.Name = "table1";
             this.table1.ReadOnly = true;
             this.table1.RowHeadersWidth = 35;
-            this.table1.Size = new System.Drawing.Size(679, 189);
+            this.table1.Size = new System.Drawing.Size(438, 419);
             this.table1.TabIndex = 0;
+            this.table1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.table1_CellContentClick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(462, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Logout";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // refresh
+            // 
+            this.refresh.Location = new System.Drawing.Point(462, 41);
+            this.refresh.Name = "refresh";
+            this.refresh.Size = new System.Drawing.Size(75, 23);
+            this.refresh.TabIndex = 2;
+            this.refresh.Text = "Refresh";
+            this.refresh.UseVisualStyleBackColor = true;
+            this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
             // added
             // 
@@ -69,31 +92,19 @@
             this.result.Name = "result";
             this.result.ReadOnly = true;
             // 
-            // button1
+            // res2
             // 
-            this.button1.Location = new System.Drawing.Point(713, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Logout";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // refresh
-            // 
-            this.refresh.Location = new System.Drawing.Point(713, 41);
-            this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(75, 23);
-            this.refresh.TabIndex = 2;
-            this.refresh.Text = "Refresh";
-            this.refresh.UseVisualStyleBackColor = true;
-            this.refresh.Click += new System.EventHandler(this.refresh_Click);
+            this.res2.HeaderText = "Zapisz lokalnie";
+            this.res2.Name = "res2";
+            this.res2.ReadOnly = true;
+            this.res2.Text = "Zapisz";
+            this.res2.UseColumnTextForButtonValue = true;
             // 
             // User
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(542, 443);
             this.Controls.Add(this.refresh);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.table1);
@@ -108,10 +119,11 @@
         #endregion
 
         private System.Windows.Forms.DataGridView table1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button refresh;
         private System.Windows.Forms.DataGridViewTextBoxColumn added;
         private System.Windows.Forms.DataGridViewTextBoxColumn date;
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button refresh;
+        private System.Windows.Forms.DataGridViewButtonColumn res2;
     }
 }

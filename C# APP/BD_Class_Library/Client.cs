@@ -147,7 +147,12 @@ namespace BD_Class_Library
                                 int jump = 0;
                                 while (jsonResponse != null)
                                 {
-                                    jsonResponse = Regex.Replace(jsonResponse, @"[^0-9a-zA-Z_-]+", "");
+                                    if(!jsonResponse.Contains("result_file"))
+                                    {
+                                        jsonResponse = Regex.Replace(jsonResponse, @"[^0-9a-zA-Z_-]+", "");
+                                    }
+                                   
+                                    
                                     if (type == 1)
                                     {
 
@@ -181,13 +186,14 @@ namespace BD_Class_Library
                                         }
                                         if (jsonResponse.Contains("result_date"))
                                         {
-                                            jsonResponse = jsonResponse.Replace("result_date", "");
-                                            jsonResponse = jsonResponse.Replace("T000000", "");
-                                            resp[1 + jump] = jsonResponse;
+                                            jsonResponse = jsonResponse.Replace("result_date", "");   
+                                            String[] r = jsonResponse.Split('T');
+                                            resp[1 + jump] = r[0];
                                         }
                                         if (jsonResponse.Contains("result_file"))
                                         {
-                                            jsonResponse = jsonResponse.Replace("result_file", "");
+                                            jsonResponse = Regex.Replace(jsonResponse, @"[^0-9a-zA-Z\+\\\/\=]+", "");
+                                            jsonResponse = jsonResponse.Replace("resultfile", "");
                                             resp[2 + jump] = jsonResponse;
                                         }
                                         if (jsonResponse.Contains("username"))
@@ -202,7 +208,7 @@ namespace BD_Class_Library
                                     }
 
                                 }
-
+                                
                                 return resp;
 
                             }
