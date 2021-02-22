@@ -29,11 +29,9 @@ UPLOADS_PATH = "C:/Users/Geops/Desktop/PROJEKT_BD_MAIN/BD_Project/Webpage/static
 app.secret_key = os.urandom(16) 
 app.config["CLIENT_PDF"] = PDF_PATH
 app.config["UPLOAD_FOLDER"] = UPLOADS_PATH
+# app.config['UPLOAD_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_EXTENSIONS = set(['pdf'])
-app.config['UPLOAD_EXTENSIONS'] = ALLOWED_EXTENSIONS
 
-
-fileNameArr = []
 
 @app.route('/',methods=['GET'])
 def home():
@@ -173,10 +171,16 @@ def register():
         if password!=passwordRep:
             return render_template("RegisterPage.html", error=error)
         
-        files = {"first_name" : name, "last_name" : surname, "pesel" : login, "password" : hashPassword(password)}
-        response = requests.post('http://127.0.0.1:5000/api/users',
-                data=json.dumps(files),
-                headers={'Content-Type':'application/json'})
+        if(checkIfUser(login)) == True:
+            files = {"first_name" : name, "last_name" : surname, "pesel" : login, "password" : hashPassword(password)}
+            response = requests.post('http://127.0.0.1:5000/api/users',
+                    data=json.dumps(files),
+                    headers={'Content-Type':'application/json'})
+        else:
+            files = {"first_name" : name, "last_name" : surname, "username" : login, "password" : hashPassword(password)}
+            response = requests.post('http://127.0.0.1:5000/api/employees',
+                    data=json.dumps(files),
+                    headers={'Content-Type':'application/json'})  
 
         if response.status_code == 201:
             return redirect("login")
