@@ -1,6 +1,6 @@
-from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort, make_response
+from flask import Flask, request, url_for, render_template, redirect, session, sessions, send_file, send_from_directory, safe_join, abort, make_response, g, jsonify, flash
 import requests
-from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs
+from functions import hashPassword, verifyPasswordHash, addLoggedUser, delLoggedUser, checkIfLoggedIn, checkIfUser, createPdfs, deletePdfs, pdfToBlob
 import json
 import os
 import base64
@@ -8,6 +8,7 @@ from markupsafe import escape
 from flask_session.__init__ import Session
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
+import datetime
 
 
 print("elo")
@@ -16,17 +17,23 @@ url = 'http://127.0.0.1:5001/'
 
 
 app = Flask(__name__)
+app.permanent = datetime.timedelta(minutes=15)
 # Session(app)
 # app.secret_key = os.urandom(16) 
-app.secret_key = "kk"
-app.config["CLIENT_PDF"] = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf"
-app.config["UPLOAD_FOLDER"] = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads"
-# app.config['UPLOAD_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# PDF_PATH = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\pdf"
+# UPLOADS_PATH = "D:\\GitHub\\BD_Project\\Webpage\\static\\client\\uploads"
+
+PDF_PATH = "C:/Users/Geops/Desktop/PROJEKT_BD_MAIN/BD_Project/Webpage/static/client/pdf"
+UPLOADS_PATH = "C:/Users/Geops/Desktop/PROJEKT_BD_MAIN/BD_Project/Webpage/static/client/uploads"
+
+app.secret_key = os.urandom(16) 
+app.config["CLIENT_PDF"] = PDF_PATH
+app.config["UPLOAD_FOLDER"] = UPLOADS_PATH
+ALLOWED_EXTENSIONS = set(['pdf'])
+app.config['UPLOAD_EXTENSIONS'] = ALLOWED_EXTENSIONS
+
 
 fileNameArr = []
-
-currentSession = ""
 
 @app.route('/',methods=['GET'])
 def home():
@@ -46,29 +53,25 @@ def login():
             return render_template("LoginPage.html", error=error)
         else:
             if checkIfUser(login):
-                response = requests.get("http://127.0.0.1:5000/api/users?pesel="+login)
+                response = requests.get("http://127.0.0.1:5000/api/users?pesel=" + login)
                 if response.status_code == 200 and checkIfLoggedIn(login) == False:
                     responseJson = response.json()
                     isPasswordValid = verifyPasswordHash(responseJson['password'], password)
                     if isPasswordValid:
                         session['login'] = login
-                        currentSession = session['login']
                         addLoggedUser(login)
                         return redirect("patientPage")
                     else:
                         render_template("LoginPage.html", error=error)   
             else:
-                response = requests.get("http://127.0.0.1:5000/api/employees?username="+login)
-                print(login + " ++++++++++++++++++")
+                response = requests.get("http://127.0.0.1:5000/api/employees?username=" + login)
                 if response.status_code == 200 and checkIfLoggedIn(login) == False:
                     responseJson = response.json()
                     isPasswordValid = verifyPasswordHash(responseJson['password'], password)
                     if isPasswordValid:
                         session['login'] = login
-                        currentSession = session['login']
-                        print(str(session) + " ++++++++++++++++++")
                         addLoggedUser(login)
-                        return redirect("adminPage")
+                        return redirect(url_for("adminPage"))
                     else:
                         render_template("LoginPage.html", error=error)     
             
@@ -78,16 +81,14 @@ def login():
 def adminPage():
     headings = ("PESEL Pacjenta", "Dodaj badanie", "Usuń Pacjenta")
     responseUsers = requests.get("http://127.0.0.1:5000/api/users").json()
-    print(str(session) + " ++++++++++++ADmin++++++")
     responseAdmin = requests.get("http://127.0.0.1:5000/api/employees?username=" + session['login']).json()
     adminId = responseAdmin['id']
     adminFirstName = responseAdmin['first_name']
     adminLastName = responseAdmin['last_name']
-    peselArr = []
     dataTuple = ()
     dataArr = []
     for elem in responseUsers:
-        dataArr.append([elem['pesel'], "upload_file/","usuń"])
+        dataArr.append([elem['pesel']])
     dataTuple = tuple(dataArr)
 
     return render_template('AdminPage.html', user_id = adminId, first_name = adminFirstName, last_name = adminLastName, headings=headings, data=dataTuple)
@@ -135,15 +136,30 @@ def get_image(file_name):
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
+    session["login"] = request.args.get("session")
+    pesel = request.args.get("pesel")
     if request.method == 'POST':
         f = request.files['file']
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename)))
-    # return render_template("AdminPage.html")
-    return redirect("adminPage")
-      
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'],f.filename))
+        blob = pdfToBlob(f.filename)
+        files = {'pesel': pesel, 'username' : session["login"], 'result_file' : blob}
+        response = requests.post('http://127.0.0.1:5000/api/results',
+                data=json.dumps(files),
+                headers={'Content-Type':'application/json'})
+    redirected = redirect(url_for("adminPage"))
+    redirected.set_cookie("login", session["login"])
+    return redirected
+
+@app.route('/remove', methods = ['GET'])
+def remove_patient():
+    session["login"] = request.args.get("session")
+    pesel = request.args.get("pesel")
+    if request.method == 'GET':
+        responsePatient = requests.get('http://127.0.0.1:5000/api/users?pesel_req=' + pesel, headers={'Content-Type':'application/json'})
+        responseResults = requests.get('http://127.0.0.1:5000/api/results?pesel_req=' + pesel, headers={'Content-Type':'application/json'})
+    redirected = redirect(url_for("adminPage"))
+    redirected.set_cookie("login", session["login"])
+    return redirected
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -157,17 +173,10 @@ def register():
         if password!=passwordRep:
             return render_template("RegisterPage.html", error=error)
         
-
-        if(checkIfUser(login)) == True:
-            files = {"first_name" : name, "last_name" : surname, "pesel" : login, "password" : hashPassword(password)}
-            response = requests.post('http://127.0.0.1:5000/api/users',
-                    data=json.dumps(files),
-                    headers={'Content-Type':'application/json'})
-        else:
-            files = {"first_name" : name, "last_name" : surname, "username" : login, "password" : hashPassword(password)}
-            response = requests.post('http://127.0.0.1:5000/api/employees',
-                    data=json.dumps(files),
-                    headers={'Content-Type':'application/json'})  
+        files = {"first_name" : name, "last_name" : surname, "pesel" : login, "password" : hashPassword(password)}
+        response = requests.post('http://127.0.0.1:5000/api/users',
+                data=json.dumps(files),
+                headers={'Content-Type':'application/json'})
 
         if response.status_code == 201:
             return redirect("login")
@@ -177,10 +186,8 @@ def register():
    
 @app.route('/logout', methods=['GET'])    
 def logout():
-    print(session['login'] + " ++++++++++++++++++")
     deletePdfs(session['login'], fileNameArr)
     delLoggedUser(session['login'])
-    currentSession = ""
     session.pop('login', None)
     return redirect(url_for('login'))
 
