@@ -88,11 +88,11 @@ namespace BD_1
                 }
                 if (response[i] == "null")
                 {
-                    table1.Rows[j].Cells[2].Value = "Nie umieszczono";
+                    table1.Rows[j].Cells[2].Value = "Not uploaded";
                 }
                 else
                 {
-                    table1.Rows[j].Cells[2].Value = "Umieszczono";
+                    table1.Rows[j].Cells[2].Value = "Uploaded";
                     blobs[j] = response[i];
                 }
            

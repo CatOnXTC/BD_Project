@@ -32,7 +32,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(login));
             this.loginBox = new System.Windows.Forms.TextBox();
             this.passBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,12 +40,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.resp = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // loginBox
             // 
-            this.loginBox.Location = new System.Drawing.Point(75, 58);
+            this.loginBox.Location = new System.Drawing.Point(85, 42);
             this.loginBox.Name = "loginBox";
             this.loginBox.Size = new System.Drawing.Size(100, 20);
             this.loginBox.TabIndex = 0;
@@ -55,7 +56,7 @@
             // passBox
             // 
             this.passBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.passBox.Location = new System.Drawing.Point(75, 97);
+            this.passBox.Location = new System.Drawing.Point(85, 81);
             this.passBox.Name = "passBox";
             this.passBox.PasswordChar = '*';
             this.passBox.Size = new System.Drawing.Size(100, 20);
@@ -64,7 +65,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(36, 61);
+            this.label1.Location = new System.Drawing.Point(46, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 2;
@@ -73,7 +74,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 100);
+            this.label2.Location = new System.Drawing.Point(26, 84);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 3;
@@ -81,7 +82,7 @@
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(19, 123);
+            this.loginButton.Location = new System.Drawing.Point(29, 107);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(156, 25);
             this.loginButton.TabIndex = 5;
@@ -104,9 +105,9 @@
             this.groupBox1.Controls.Add(this.passBox);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(90, 114);
+            this.groupBox1.Location = new System.Drawing.Point(88, 123);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(215, 189);
+            this.groupBox1.Size = new System.Drawing.Size(215, 163);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
@@ -114,17 +115,28 @@
             // resp
             // 
             this.resp.AutoSize = true;
-            this.resp.Location = new System.Drawing.Point(19, 155);
+            this.resp.Location = new System.Drawing.Point(29, 139);
             this.resp.Name = "resp";
             this.resp.Size = new System.Drawing.Size(0, 13);
             this.resp.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pictureBox1.Image = global::BD_1.Properties.Resources.logo3png;
+            this.pictureBox1.Location = new System.Drawing.Point(-6, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(395, 103);
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(384, 461);
+            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.ClientSize = new System.Drawing.Size(384, 306);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label3);
             this.MaximizeBox = false;
@@ -133,6 +145,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -147,6 +160,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label resp;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
