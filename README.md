@@ -4,16 +4,6 @@ A studies project of a medical database (Medic system) that holds users data and
 #
 App uses Flask API and SQLALCHEMY into a working Api that allows tranfer of data as well as a C# app for admin.
 
-#
-
-### List of created endpoints API side:
-
-#
-
-### List of created endpoint Webpage
-
-#
-
 ### How to run
 Create and activate virtual enviroment and install all neccesary packages
 ```
